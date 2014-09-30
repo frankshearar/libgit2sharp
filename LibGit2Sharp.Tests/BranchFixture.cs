@@ -252,7 +252,7 @@ namespace LibGit2Sharp.Tests
         {
             using (var repo = new Repository(BareTestRepoPath))
             {
-                Assert.Throws<LibGit2SharpException>(() => repo.Branches.Add("my_new_branch", "my_old_branch"));
+                Assert.Throws<NotFoundException>(() => repo.Branches.Add("my_new_branch", "my_old_branch"));
             }
         }
 
@@ -261,8 +261,8 @@ namespace LibGit2Sharp.Tests
         {
             using (var repo = new Repository(BareTestRepoPath))
             {
-                Assert.Throws<LibGit2SharpException>(() => repo.Branches.Add("my_new_branch", Constants.UnknownSha));
-                Assert.Throws<LibGit2SharpException>(() => repo.Branches.Add("my_new_branch", Constants.UnknownSha.Substring(0, 7)));
+                Assert.Throws<NotFoundException>(() => repo.Branches.Add("my_new_branch", Constants.UnknownSha));
+                Assert.Throws<NotFoundException>(() => repo.Branches.Add("my_new_branch", Constants.UnknownSha.Substring(0, 7)));
             }
         }
 
@@ -707,7 +707,7 @@ namespace LibGit2Sharp.Tests
 
                 Branch trackedBranch = repo.Branches[trackedBranchName];
 
-                Assert.Throws<LibGit2SharpException>(() => repo.Branches.Update(branch,
+                Assert.Throws<NotFoundException>(() => repo.Branches.Update(branch,
                                                                                 b => b.TrackedBranch = trackedBranch.CanonicalName));
             }
         }
