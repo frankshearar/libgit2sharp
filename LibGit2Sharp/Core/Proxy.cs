@@ -1313,7 +1313,7 @@ namespace LibGit2Sharp.Core
                 }
 
                 if (!throwsIfCanNotPeel &&
-                    (res == (int)GitErrorCode.NotFound || res == (int)GitErrorCode.Ambiguous || res == (int)GitErrorCode.InvalidSpecification || res == (int)GitErrorCode.Peel))
+                    (res == (int)GitErrorCode.InvalidSpecification || res == (int)GitErrorCode.Peel))
                 {
                     return null;
                 }

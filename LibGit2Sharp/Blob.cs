@@ -26,6 +26,21 @@ namespace LibGit2Sharp
         }
 
         /// <summary>
+        /// A blob cannot be dereferenced to a commit - throws or returns null.
+        /// </summary>
+        /// <param name="throwsIfCanNotBeDereferencedToACommit"></param>
+        /// <returns></returns>
+        internal override Commit DereferenceToCommit(bool throwsIfCanNotBeDereferencedToACommit)
+        {
+            if (throwsIfCanNotBeDereferencedToACommit)
+            {
+                throw new CannotDereferenceException("Cannot dereference a blob object to a commit.");
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Gets the size in bytes of the raw content of a blob.
         /// <para> Please note that this would load entire blob content in the memory to compute the Size.
         /// In order to read blob size from header, Repository.ObjectMetadata.RetrieveObjectMetadata(Blob.Id).Size

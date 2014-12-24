@@ -71,7 +71,7 @@ namespace LibGit2Sharp.Tests
                 Assert.Throws<ArgumentNullException>(() => repo.Reset(ResetMode.Soft, (Commit)null));
                 Assert.Throws<ArgumentException>(() => repo.Reset(ResetMode.Soft, ""));
                 Assert.Throws<NotFoundException>(() => repo.Reset(ResetMode.Soft, Constants.UnknownSha));
-                Assert.Throws<InvalidSpecificationException>(() => repo.Reset(ResetMode.Soft, repo.Head.Tip.Tree.Sha));
+                Assert.Throws<CannotDereferenceException>(() => repo.Reset(ResetMode.Soft, repo.Head.Tip.Tree.Sha));
             }
         }
 

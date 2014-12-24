@@ -241,9 +241,9 @@ namespace LibGit2Sharp.Tests
             using (var repo = new Repository(BareTestRepoPath))
             {
                 const string name = "sorry-dude-i-do-not-do-blobs-nor-trees";
-                Assert.Throws<InvalidSpecificationException>(() => repo.CreateBranch(name, "refs/tags/point_to_blob"));
-                Assert.Throws<InvalidSpecificationException>(() => repo.CreateBranch(name, "53fc32d"));
-                Assert.Throws<InvalidSpecificationException>(() => repo.CreateBranch(name, "0266163"));
+                Assert.Throws<CannotDereferenceException>(() => repo.CreateBranch(name, "refs/tags/point_to_blob"));
+                Assert.Throws<CannotDereferenceException>(() => repo.CreateBranch(name, "53fc32d"));
+                Assert.Throws<CannotDereferenceException>(() => repo.CreateBranch(name, "0266163"));
             }
         }
 
