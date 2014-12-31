@@ -42,7 +42,7 @@ namespace LibGit2Sharp
         /// <returns>An <see cref="IEnumerator{T}"/> object that can be used to iterate through the collection.</returns>
         public virtual IEnumerator<Stash> GetEnumerator()
         {
-            return Proxy.git_stash_foreach(repo.Handle,
+            return Proxy.Std.git_stash_foreach(repo.Handle,
                 (index, message, commitId) => new Stash(repo, new ObjectId(commitId), index)).GetEnumerator();
         }
 
@@ -87,9 +87,9 @@ namespace LibGit2Sharp
         {
             Ensure.ArgumentNotNull(stasher, "stasher");
 
-            string prettifiedMessage = Proxy.git_message_prettify(string.IsNullOrEmpty(message) ? string.Empty : message, null);
+            string prettifiedMessage = Proxy.Std.git_message_prettify(string.IsNullOrEmpty(message) ? string.Empty : message, null);
 
-            ObjectId oid = Proxy.git_stash_save(repo.Handle, stasher, prettifiedMessage, options);
+            ObjectId oid = Proxy.Std.git_stash_save(repo.Handle, stasher, prettifiedMessage, options);
 
             // in case there is nothing to stash
             if (oid == null)
@@ -111,7 +111,7 @@ namespace LibGit2Sharp
                 throw new ArgumentException("The passed index must be a positive integer.", "index");
             }
 
-            Proxy.git_stash_drop(repo.Handle, index);
+            Proxy.Std.git_stash_drop(repo.Handle, index);
         }
 
         private string DebuggerDisplay

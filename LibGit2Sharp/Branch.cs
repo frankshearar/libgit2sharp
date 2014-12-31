@@ -216,7 +216,7 @@ namespace LibGit2Sharp
 
         private string RemoteNameFromRemoteTrackingBranch()
         {
-            return Proxy.git_branch_remote_name(repo.Handle, CanonicalName, false);
+            return Proxy.Std.git_branch_remote_name(repo.Handle, CanonicalName, false);
         }
 
         /// <summary>
@@ -252,7 +252,7 @@ namespace LibGit2Sharp
                 return null;
             }
 
-            string trackedReferenceName = Proxy.git_branch_upstream_name(repo.Handle, CanonicalName);
+            string trackedReferenceName = Proxy.Std.git_branch_upstream_name(repo.Handle, CanonicalName);
 
             if (trackedReferenceName == null)
             {

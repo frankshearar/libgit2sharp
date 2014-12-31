@@ -735,7 +735,7 @@ namespace LibGit2Sharp
         /// <param name="repository">The <see cref="IRepository"/> being worked with.</param>
         public static RepositoryStatus RetrieveStatus(this IRepository repository)
         {
-            Proxy.git_index_read(repository.Index.Handle);
+            Proxy.Std.git_index_read(repository.Index.Handle);
             return new RepositoryStatus((Repository)repository, null);
         }
     }

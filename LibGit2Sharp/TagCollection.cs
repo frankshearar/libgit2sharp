@@ -52,7 +52,7 @@ namespace LibGit2Sharp
         /// <returns>An <see cref="IEnumerator{T}"/> object that can be used to iterate through the collection.</returns>
         public virtual IEnumerator<Tag> GetEnumerator()
         {
-            return Proxy
+            return Proxy.Std
                 .git_tag_list(repo.Handle)
                 .Select(n => this[n])
                 .GetEnumerator();
@@ -85,9 +85,9 @@ namespace LibGit2Sharp
             Ensure.ArgumentNotNull(tagger, "tagger");
             Ensure.ArgumentNotNull(message, "message");
 
-            string prettifiedMessage = Proxy.git_message_prettify(message, null);
+            string prettifiedMessage = Proxy.Std.git_message_prettify(message, null);
 
-            Proxy.git_tag_create(repo.Handle, name, target, tagger, prettifiedMessage, allowOverwrite);
+            Proxy.Std.git_tag_create(repo.Handle, name, target, tagger, prettifiedMessage, allowOverwrite);
 
             return this[name];
         }
@@ -104,7 +104,7 @@ namespace LibGit2Sharp
             Ensure.ArgumentNotNullOrEmptyString(name, "name");
             Ensure.ArgumentNotNull(target, "target");
 
-            Proxy.git_tag_create_lightweight(repo.Handle, name, target, allowOverwrite);
+            Proxy.Std.git_tag_create_lightweight(repo.Handle, name, target, allowOverwrite);
 
             return this[name];
         }

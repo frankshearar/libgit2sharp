@@ -50,7 +50,7 @@ namespace LibGit2Sharp
                        {
                            Path = path.Native,
                            Id = entry.Id,
-                           StageLevel = Proxy.git_index_entry_stage(handle),
+                           StageLevel = Proxy.Std.git_index_entry_stage(handle),
                            Mode = (Mode)entry.Mode
                        };
         }

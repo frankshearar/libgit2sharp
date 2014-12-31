@@ -50,7 +50,7 @@ namespace LibGit2Sharp
 
         internal TreeChanges(DiffSafeHandle diff)
         {
-            Proxy.git_diff_foreach(diff, FileCallback, null, null);
+            Proxy.Std.git_diff_foreach(diff, FileCallback, null, null);
         }
 
         private int FileCallback(GitDiffDelta delta, float progress, IntPtr payload)

@@ -50,7 +50,7 @@ namespace LibGit2Sharp
         /// <returns>An <see cref="IEnumerator{T}"/> object that can be used to iterate through the collection.</returns>
         public virtual IEnumerator<Reference> GetEnumerator()
         {
-            return Proxy.git_reference_list(repo.Handle)
+            return Proxy.Std.git_reference_list(repo.Handle)
                 .Select(n => this[n])
                 .GetEnumerator();
         }
@@ -80,7 +80,7 @@ namespace LibGit2Sharp
             Ensure.ArgumentNotNullOrEmptyString(name, "name");
             Ensure.ArgumentNotNull(targetId, "targetId");
 
-            using (ReferenceSafeHandle handle = Proxy.git_reference_create(repo.Handle, name, targetId, allowOverwrite, signature.OrDefault(repo.Config), logMessage))
+            using (ReferenceSafeHandle handle = Proxy.Std.git_reference_create(repo.Handle, name, targetId, allowOverwrite, signature.OrDefault(repo.Config), logMessage))
             {
                 return (DirectReference)Reference.BuildFromPtr<Reference>(handle, repo);
             }
@@ -112,7 +112,7 @@ namespace LibGit2Sharp
             Ensure.ArgumentNotNullOrEmptyString(name, "name");
             Ensure.ArgumentNotNull(targetRef, "targetRef");
 
-            using (ReferenceSafeHandle handle = Proxy.git_reference_symbolic_create(repo.Handle, name, targetRef.CanonicalName,
+            using (ReferenceSafeHandle handle = Proxy.Std.git_reference_symbolic_create(repo.Handle, name, targetRef.CanonicalName,
                 allowOverwrite, signature.OrDefault(repo.Config), logMessage))
             {
                 return (SymbolicReference)Reference.BuildFromPtr<Reference>(handle, repo);
@@ -139,7 +139,7 @@ namespace LibGit2Sharp
         {
             Ensure.ArgumentNotNull(reference, "reference");
 
-            Proxy.git_reference_remove(repo.Handle, reference.CanonicalName);
+            Proxy.Std.git_reference_remove(repo.Handle, reference.CanonicalName);
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace LibGit2Sharp
             }
 
             using (ReferenceSafeHandle referencePtr = RetrieveReferencePtr(reference.CanonicalName))
-            using (ReferenceSafeHandle handle = Proxy.git_reference_rename(referencePtr, newName, allowOverwrite, signature.OrDefault(repo.Config), logMessage))
+            using (ReferenceSafeHandle handle = Proxy.Std.git_reference_rename(referencePtr, newName, allowOverwrite, signature.OrDefault(repo.Config), logMessage))
             {
                 return Reference.BuildFromPtr<Reference>(handle, repo);
             }
@@ -212,7 +212,7 @@ namespace LibGit2Sharp
             }
 
             using (ReferenceSafeHandle referencePtr = RetrieveReferencePtr(directRef.CanonicalName))
-            using (ReferenceSafeHandle handle = Proxy.git_reference_set_target(referencePtr, targetId, signature, logMessage))
+            using (ReferenceSafeHandle handle = Proxy.Std.git_reference_set_target(referencePtr, targetId, signature, logMessage))
             {
                 return Reference.BuildFromPtr<Reference>(handle, repo);
             }
@@ -250,7 +250,7 @@ namespace LibGit2Sharp
             }
 
             using (ReferenceSafeHandle referencePtr = RetrieveReferencePtr(symbolicRef.CanonicalName))
-            using (ReferenceSafeHandle handle = Proxy.git_reference_symbolic_set_target(referencePtr, targetRef.CanonicalName, signature, logMessage))
+            using (ReferenceSafeHandle handle = Proxy.Std.git_reference_symbolic_set_target(referencePtr, targetRef.CanonicalName, signature, logMessage))
             {
                 return Reference.BuildFromPtr<Reference>(handle, repo);
             }
@@ -273,11 +273,11 @@ namespace LibGit2Sharp
 
             if (target is ObjectId)
             {
-                Proxy.git_repository_set_head_detached(repo.Handle, target as ObjectId, signature, logMessage);
+                Proxy.Std.git_repository_set_head_detached(repo.Handle, target as ObjectId, signature, logMessage);
             }
             else if (target is DirectReference || target is SymbolicReference)
             {
-                Proxy.git_repository_set_head(repo.Handle, (target as Reference).CanonicalName, signature, logMessage);
+                Proxy.Std.git_repository_set_head(repo.Handle, (target as Reference).CanonicalName, signature, logMessage);
             }
             else if (target is string)
             {
@@ -285,7 +285,7 @@ namespace LibGit2Sharp
 
                 if (Reference.IsValidName(targetIdentifier))
                 {
-                    Proxy.git_repository_set_head(repo.Handle, targetIdentifier, signature, logMessage);
+                    Proxy.Std.git_repository_set_head(repo.Handle, targetIdentifier, signature, logMessage);
                 }
                 else
                 {
@@ -295,7 +295,7 @@ namespace LibGit2Sharp
                         LookUpOptions.DereferenceResultToCommit |
                         LookUpOptions.ThrowWhenCanNotBeDereferencedToACommit);
 
-                    Proxy.git_repository_set_head_detached(repo.Handle, commit.Id, signature, logMessage);
+                    Proxy.Std.git_repository_set_head_detached(repo.Handle, commit.Id, signature, logMessage);
                 }
             }
             else
@@ -309,7 +309,7 @@ namespace LibGit2Sharp
 
         internal ReferenceSafeHandle RetrieveReferencePtr(string referenceName, bool shouldThrowIfNotFound = true)
         {
-            ReferenceSafeHandle reference = Proxy.git_reference_lookup(repo.Handle, referenceName, shouldThrowIfNotFound);
+            ReferenceSafeHandle reference = Proxy.Std.git_reference_lookup(repo.Handle, referenceName, shouldThrowIfNotFound);
 
             return reference;
         }
@@ -323,7 +323,7 @@ namespace LibGit2Sharp
         {
             Ensure.ArgumentNotNullOrEmptyString(pattern, "pattern");
 
-            return Proxy.git_reference_foreach_glob(repo.Handle, pattern, LaxUtf8Marshaler.FromNative)
+            return Proxy.Std.git_reference_foreach_glob(repo.Handle, pattern, LaxUtf8Marshaler.FromNative)
                 .Select(n => this[n]);
         }
 
@@ -413,7 +413,7 @@ namespace LibGit2Sharp
         /// <param name="canonicalName">Canonical name of the reference</param>
         internal void EnsureHasLog(string canonicalName)
         {
-            Proxy.git_reference_ensure_log(repo.Handle, canonicalName);
+            Proxy.Std.git_reference_ensure_log(repo.Handle, canonicalName);
         }
     }
 }

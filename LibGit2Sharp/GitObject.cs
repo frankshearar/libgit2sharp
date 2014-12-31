@@ -79,14 +79,14 @@ namespace LibGit2Sharp
 
         internal Commit DereferenceToCommit(bool throwsIfCanNotBeDereferencedToACommit)
         {
-            using (GitObjectSafeHandle peeledHandle = Proxy.git_object_peel(repo.Handle, Id, GitObjectType.Commit, throwsIfCanNotBeDereferencedToACommit))
+            using (GitObjectSafeHandle peeledHandle = Proxy.Std.git_object_peel(repo.Handle, Id, GitObjectType.Commit, throwsIfCanNotBeDereferencedToACommit))
             {
                 if (peeledHandle == null)
                 {
                     return null;
                 }
 
-                return (Commit)BuildFrom(repo, Proxy.git_object_id(peeledHandle), GitObjectType.Commit, null);
+                return (Commit)BuildFrom(repo, Proxy.Std.git_object_id(peeledHandle), GitObjectType.Commit, null);
             }
         }
 

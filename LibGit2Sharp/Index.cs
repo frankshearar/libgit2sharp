@@ -31,7 +31,7 @@ namespace LibGit2Sharp
         {
             this.repo = repo;
 
-            handle = Proxy.git_repository_index(repo.Handle);
+            handle = Proxy.Std.git_repository_index(repo.Handle);
             conflicts = new ConflictCollection(repo);
 
             repo.RegisterForCleanup(handle);
@@ -41,8 +41,8 @@ namespace LibGit2Sharp
         {
             this.repo = repo;
 
-            handle = Proxy.git_index_open(indexPath);
-            Proxy.git_repository_set_index(repo.Handle, handle);
+            handle = Proxy.Std.git_index_open(indexPath);
+            Proxy.Std.git_repository_set_index(repo.Handle, handle);
             conflicts = new ConflictCollection(repo);
 
             repo.RegisterForCleanup(handle);
@@ -58,7 +58,7 @@ namespace LibGit2Sharp
         /// </summary>
         public virtual int Count
         {
-            get { return Proxy.git_index_entrycount(handle); }
+            get { return Proxy.Std.git_index_entrycount(handle); }
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace LibGit2Sharp
         /// </summary>
         public virtual bool IsFullyMerged
         {
-            get { return !Proxy.git_index_has_conflicts(handle); }
+            get { return !Proxy.Std.git_index_has_conflicts(handle); }
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace LibGit2Sharp
             {
                 Ensure.ArgumentNotNullOrEmptyString(path, "path");
 
-                IndexEntrySafeHandle entryHandle = Proxy.git_index_get_bypath(handle, path, 0);
+                IndexEntrySafeHandle entryHandle = Proxy.Std.git_index_get_bypath(handle, path, 0);
                 return IndexEntry.BuildFromPtr(entryHandle);
             }
         }
@@ -87,7 +87,7 @@ namespace LibGit2Sharp
         {
             get
             {
-                IndexEntrySafeHandle entryHandle = Proxy.git_index_get_byindex(handle, (UIntPtr)index);
+                IndexEntrySafeHandle entryHandle = Proxy.Std.git_index_get_byindex(handle, (UIntPtr)index);
                 return IndexEntry.BuildFromPtr(entryHandle);
             }
         }
@@ -138,7 +138,7 @@ namespace LibGit2Sharp
         {
             using (var obj = new ObjectSafeWrapper(source.Id, repo.Handle))
             {
-                Proxy.git_index_read_fromtree(this, obj.ObjectPtr);
+                Proxy.Std.git_index_read_fromtree(this, obj.ObjectPtr);
             }
 
             UpdatePhysicalIndex();
@@ -153,20 +153,20 @@ namespace LibGit2Sharp
         /// </summary>
         public virtual void Clear()
         {
-            Proxy.git_index_clear(this);
+            Proxy.Std.git_index_clear(this);
             UpdatePhysicalIndex();
         }
 
         private string RemoveFromIndex(string relativePath)
         {
-            Proxy.git_index_remove_bypath(handle, relativePath);
+            Proxy.Std.git_index_remove_bypath(handle, relativePath);
 
             return relativePath;
         }
 
         private void UpdatePhysicalIndex()
         {
-            Proxy.git_index_write(handle);
+            Proxy.Std.git_index_write(handle);
         }
 
         internal void Replace(TreeChanges changes)
@@ -216,7 +216,7 @@ namespace LibGit2Sharp
                 Path = StrictFilePathMarshaler.FromManaged(treeEntryChanges.OldPath),
             };
 
-            Proxy.git_index_add(handle, indexEntry);
+            Proxy.Std.git_index_add(handle, indexEntry);
             EncodingMarshaler.Cleanup(indexEntry.Path);
         }
 

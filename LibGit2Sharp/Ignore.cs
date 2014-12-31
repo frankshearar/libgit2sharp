@@ -40,7 +40,7 @@ namespace LibGit2Sharp
                 return acc;
             });
 
-            Proxy.git_ignore_add_rule(repo.Handle, allRules.ToString());
+            Proxy.Std.git_ignore_add_rule(repo.Handle, allRules.ToString());
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace LibGit2Sharp
         /// </summary>
         public virtual void ResetAllTemporaryRules()
         {
-            Proxy.git_ignore_clear_internal_rules(repo.Handle);
+            Proxy.Std.git_ignore_clear_internal_rules(repo.Handle);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace LibGit2Sharp
         {
             Ensure.ArgumentNotNullOrEmptyString(relativePath, "relativePath");
 
-            return Proxy.git_ignore_path_is_ignored(repo.Handle, relativePath);
+            return Proxy.Std.git_ignore_path_is_ignored(repo.Handle, relativePath);
         }
     }
 }

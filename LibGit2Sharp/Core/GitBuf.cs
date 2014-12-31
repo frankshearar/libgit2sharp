@@ -12,7 +12,7 @@ namespace LibGit2Sharp.Core.Handles
 
         public void Dispose()
         {
-            Proxy.git_buf_free(this);
+            Proxy.Std.git_buf_free(this);
         }
     }
 }

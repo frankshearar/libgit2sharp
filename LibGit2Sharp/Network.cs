@@ -52,17 +52,17 @@ namespace LibGit2Sharp
         {
             Ensure.ArgumentNotNull(remote, "remote");
 
-            using (RemoteSafeHandle remoteHandle = Proxy.git_remote_lookup(repository.Handle, remote.Name, true))
+            using (RemoteSafeHandle remoteHandle = Proxy.Std.git_remote_lookup(repository.Handle, remote.Name, true))
             {
                 if (credentialsProvider != null)
                 {
                     var callbacks = new RemoteCallbacks(credentialsProvider);
                     GitRemoteCallbacks gitCallbacks = callbacks.GenerateCallbacks();
-                    Proxy.git_remote_set_callbacks(remoteHandle, ref gitCallbacks);
+                    Proxy.Std.git_remote_set_callbacks(remoteHandle, ref gitCallbacks);
                 }
 
-                Proxy.git_remote_connect(remoteHandle, GitDirection.Fetch);
-                return Proxy.git_remote_ls(repository, remoteHandle);
+                Proxy.Std.git_remote_connect(remoteHandle, GitDirection.Fetch);
+                return Proxy.Std.git_remote_ls(repository, remoteHandle);
             }
         }
 
@@ -81,10 +81,10 @@ namespace LibGit2Sharp
         {
             Ensure.ArgumentNotNull(url, "url");
 
-            using (RemoteSafeHandle remoteHandle = Proxy.git_remote_create_anonymous(repository.Handle, url, null))
+            using (RemoteSafeHandle remoteHandle = Proxy.Std.git_remote_create_anonymous(repository.Handle, url, null))
             {
-                Proxy.git_remote_connect(remoteHandle, GitDirection.Fetch);
-                return Proxy.git_remote_ls(repository, remoteHandle);
+                Proxy.Std.git_remote_connect(remoteHandle, GitDirection.Fetch);
+                return Proxy.Std.git_remote_ls(repository, remoteHandle);
             }
         }
 
@@ -97,7 +97,7 @@ namespace LibGit2Sharp
 
             if (options.TagFetchMode.HasValue)
             {
-                Proxy.git_remote_set_autotag(remoteHandle, options.TagFetchMode.Value);
+                Proxy.Std.git_remote_set_autotag(remoteHandle, options.TagFetchMode.Value);
             }
 
             var callbacks = new RemoteCallbacks(options);
@@ -111,9 +111,9 @@ namespace LibGit2Sharp
             //
             // Also, if GitRemoteCallbacks were a class instead of a struct, we would need to guard against
             // GC occuring in between setting the remote callbacks and actual usage in one of the functions afterwords.
-            Proxy.git_remote_set_callbacks(remoteHandle, ref gitCallbacks);
+            Proxy.Std.git_remote_set_callbacks(remoteHandle, ref gitCallbacks);
 
-            Proxy.git_remote_fetch(remoteHandle, signature, logMessage);
+            Proxy.Std.git_remote_fetch(remoteHandle, signature, logMessage);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace LibGit2Sharp
         {
             Ensure.ArgumentNotNull(remote, "remote");
 
-            using (RemoteSafeHandle remoteHandle = Proxy.git_remote_lookup(repository.Handle, remote.Name, true))
+            using (RemoteSafeHandle remoteHandle = Proxy.Std.git_remote_lookup(repository.Handle, remote.Name, true))
             {
                 DoFetch(remoteHandle, options, signature.OrDefault(repository.Config), logMessage);
             }
@@ -150,9 +150,9 @@ namespace LibGit2Sharp
             Ensure.ArgumentNotNull(remote, "remote");
             Ensure.ArgumentNotNull(refspecs, "refspecs");
 
-            using (RemoteSafeHandle remoteHandle = Proxy.git_remote_lookup(repository.Handle, remote.Name, true))
+            using (RemoteSafeHandle remoteHandle = Proxy.Std.git_remote_lookup(repository.Handle, remote.Name, true))
             {
-                Proxy.git_remote_set_fetch_refspecs(remoteHandle, refspecs);
+                Proxy.Std.git_remote_set_fetch_refspecs(remoteHandle, refspecs);
 
                 DoFetch(remoteHandle, options, signature.OrDefault(repository.Config), logMessage);
             }
@@ -176,9 +176,9 @@ namespace LibGit2Sharp
             Ensure.ArgumentNotNull(url, "url");
             Ensure.ArgumentNotNull(refspecs, "refspecs");
 
-            using (RemoteSafeHandle remoteHandle = Proxy.git_remote_create_anonymous(repository.Handle, url, null))
+            using (RemoteSafeHandle remoteHandle = Proxy.Std.git_remote_create_anonymous(repository.Handle, url, null))
             {
-                Proxy.git_remote_set_fetch_refspecs(remoteHandle, refspecs);
+                Proxy.Std.git_remote_set_fetch_refspecs(remoteHandle, refspecs);
 
                 DoFetch(remoteHandle, options, signature.OrDefault(repository.Config), logMessage);
             }
@@ -270,18 +270,18 @@ namespace LibGit2Sharp
             PushCallbacks pushStatusUpdates = new PushCallbacks(pushOptions.OnPushStatusError);
 
             // Load the remote.
-            using (RemoteSafeHandle remoteHandle = Proxy.git_remote_lookup(repository.Handle, remote.Name, true))
+            using (RemoteSafeHandle remoteHandle = Proxy.Std.git_remote_lookup(repository.Handle, remote.Name, true))
             {
                 var callbacks = new RemoteCallbacks(pushOptions.CredentialsProvider);
                 GitRemoteCallbacks gitCallbacks = callbacks.GenerateCallbacks();
-                Proxy.git_remote_set_callbacks(remoteHandle, ref gitCallbacks);
+                Proxy.Std.git_remote_set_callbacks(remoteHandle, ref gitCallbacks);
 
                 try
                 {
-                    Proxy.git_remote_connect(remoteHandle, GitDirection.Push);
+                    Proxy.Std.git_remote_connect(remoteHandle, GitDirection.Push);
 
                     // Perform the actual push.
-                    using (PushSafeHandle pushHandle = Proxy.git_push_new(remoteHandle))
+                    using (PushSafeHandle pushHandle = Proxy.Std.git_push_new(remoteHandle))
                     {
                         pushTransferCallbacks = new PushTransferCallbacks(pushOptions.OnPushTransferProgress);
                         packBuilderCallbacks = new PackbuilderCallbacks(pushOptions.OnPackBuilderProgress);
@@ -289,10 +289,10 @@ namespace LibGit2Sharp
                         pushProgress = pushTransferCallbacks.GenerateCallback();
                         packBuilderProgress = packBuilderCallbacks.GenerateCallback();
 
-                        Proxy.git_push_set_callbacks(pushHandle, pushProgress, packBuilderProgress);
+                        Proxy.Std.git_push_set_callbacks(pushHandle, pushProgress, packBuilderProgress);
 
                         // Set push options.
-                        Proxy.git_push_set_options(pushHandle,
+                        Proxy.Std.git_push_set_options(pushHandle,
                             new GitPushOptions()
                             {
                                 PackbuilderDegreeOfParallelism = pushOptions.PackbuilderDegreeOfParallelism
@@ -301,17 +301,17 @@ namespace LibGit2Sharp
                         // Add refspecs.
                         foreach (string pushRefSpec in pushRefSpecs)
                         {
-                            Proxy.git_push_add_refspec(pushHandle, pushRefSpec);
+                            Proxy.Std.git_push_add_refspec(pushHandle, pushRefSpec);
                         }
 
-                        Proxy.git_push_finish(pushHandle);
-                        Proxy.git_push_status_foreach(pushHandle, pushStatusUpdates.Callback);
-                        Proxy.git_push_update_tips(pushHandle, signature.OrDefault(repository.Config), logMessage);
+                        Proxy.Std.git_push_finish(pushHandle);
+                        Proxy.Std.git_push_status_foreach(pushHandle, pushStatusUpdates.Callback);
+                        Proxy.Std.git_push_update_tips(pushHandle, signature.OrDefault(repository.Config), logMessage);
                     }
                 }
                 finally
                 {
-                    Proxy.git_remote_disconnect(remoteHandle);
+                    Proxy.Std.git_remote_disconnect(remoteHandle);
                 }
             }
 
@@ -356,7 +356,7 @@ namespace LibGit2Sharp
             {
                 int i = 0;
 
-                return Proxy.git_repository_fetchhead_foreach(
+                return Proxy.Std.git_repository_fetchhead_foreach(
                     repository.Handle,
                     (name, url, oid, isMerge) => new FetchHead(repository, name, url, oid, isMerge, i++));
             }
@@ -386,7 +386,7 @@ namespace LibGit2Sharp
                 // this indicates a bug somewhere (libgit2, server, etc).
                 if (referenceNamePtr == IntPtr.Zero)
                 {
-                    Proxy.giterr_set_str(GitErrorCategory.Invalid, "Not expecting null for reference name in push status.");
+                    Proxy.Std.giterr_set_str(GitErrorCategory.Invalid, "Not expecting null for reference name in push status.");
                     return -1;
                 }
 

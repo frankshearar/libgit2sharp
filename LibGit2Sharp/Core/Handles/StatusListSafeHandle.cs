@@ -9,7 +9,7 @@ namespace LibGit2Sharp.Core.Handles
     {
         protected override bool ReleaseHandleImpl()
         {
-            Proxy.git_status_list_free(handle);
+            Proxy.Std.git_status_list_free(handle);
             return true;
         }
     }

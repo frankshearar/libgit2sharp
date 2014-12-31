@@ -91,7 +91,7 @@ namespace LibGit2Sharp
         /// <returns>An <see cref="IEnumerator{T}"/> object that can be used to iterate through the collection.</returns>
         public virtual IEnumerator<Branch> GetEnumerator()
         {
-            return Proxy.git_branch_iterator(repo, GitBranchType.GIT_BRANCH_ALL)
+            return Proxy.Std.git_branch_iterator(repo, GitBranchType.GIT_BRANCH_ALL)
                         .ToList().GetEnumerator();
         }
 
@@ -125,7 +125,7 @@ namespace LibGit2Sharp
                 logMessage = "branch: Created from " + commit.Id;
             }
 
-            using (Proxy.git_branch_create(repo.Handle, name, commit.Id, allowOverwrite, signature.OrDefault(repo.Config), logMessage)) {}
+            using (Proxy.Std.git_branch_create(repo.Handle, name, commit.Id, allowOverwrite, signature.OrDefault(repo.Config), logMessage)) {}
 
             var branch = this[ShortToLocalName(name)];
             return branch;
@@ -153,7 +153,7 @@ namespace LibGit2Sharp
 
             using (ReferenceSafeHandle referencePtr = repo.Refs.RetrieveReferencePtr(branch.CanonicalName))
             {
-                Proxy.git_branch_delete(referencePtr);
+                Proxy.Std.git_branch_delete(referencePtr);
             }
         }
 
@@ -186,7 +186,7 @@ namespace LibGit2Sharp
 
             using (ReferenceSafeHandle referencePtr = repo.Refs.RetrieveReferencePtr(Reference.LocalBranchPrefix + branch.Name))
             {
-                using (Proxy.git_branch_move(referencePtr, newName, allowOverwrite, signature.OrDefault(repo.Config), logMessage))
+                using (Proxy.Std.git_branch_move(referencePtr, newName, allowOverwrite, signature.OrDefault(repo.Config), logMessage))
                 {
                 }
             }

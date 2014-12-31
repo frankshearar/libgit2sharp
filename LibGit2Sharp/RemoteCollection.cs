@@ -43,7 +43,7 @@ namespace LibGit2Sharp
         {
             Ensure.ArgumentNotNull(name, "name");
 
-            using (RemoteSafeHandle handle = Proxy.git_remote_lookup(repository.Handle, name, shouldThrowIfNotFound))
+            using (RemoteSafeHandle handle = Proxy.Std.git_remote_lookup(repository.Handle, name, shouldThrowIfNotFound))
             {
                 return handle == null ? null : Remote.BuildFromPtr(handle, this.repository);
             }
@@ -74,7 +74,7 @@ namespace LibGit2Sharp
         /// <returns>An <see cref="IEnumerator{T}"/> object that can be used to iterate through the collection.</returns>
         public virtual IEnumerator<Remote> GetEnumerator()
         {
-            return Proxy
+            return Proxy.Std
                 .git_remote_list(repository.Handle)
                 .Select(n => this[n])
                 .GetEnumerator();
@@ -103,7 +103,7 @@ namespace LibGit2Sharp
             Ensure.ArgumentNotNull(name, "name");
             Ensure.ArgumentNotNull(url, "url");
 
-            using (RemoteSafeHandle handle = Proxy.git_remote_create(repository.Handle, name, url))
+            using (RemoteSafeHandle handle = Proxy.Std.git_remote_create(repository.Handle, name, url))
             {
                 return Remote.BuildFromPtr(handle, this.repository);
             }
@@ -122,7 +122,7 @@ namespace LibGit2Sharp
             Ensure.ArgumentNotNull(url, "url");
             Ensure.ArgumentNotNull(fetchRefSpec, "fetchRefSpec");
 
-            using (RemoteSafeHandle handle = Proxy.git_remote_create_with_fetchspec(repository.Handle, name, url, fetchRefSpec))
+            using (RemoteSafeHandle handle = Proxy.Std.git_remote_create_with_fetchspec(repository.Handle, name, url, fetchRefSpec))
             {
                 return Remote.BuildFromPtr(handle, this.repository);
             }
@@ -137,7 +137,7 @@ namespace LibGit2Sharp
         {
             Ensure.ArgumentNotNull(name, "name");
 
-            Proxy.git_remote_delete(repository.Handle, name);
+            Proxy.Std.git_remote_delete(repository.Handle, name);
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace LibGit2Sharp
             Ensure.ArgumentNotNull(name, "name");
             Ensure.ArgumentNotNull(newName, "newName");
 
-            Proxy.git_remote_rename(repository.Handle, name, newName, callback);
+            Proxy.Std.git_remote_rename(repository.Handle, name, newName, callback);
             return this[newName];
         }
 

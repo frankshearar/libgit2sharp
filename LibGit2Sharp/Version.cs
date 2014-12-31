@@ -44,7 +44,7 @@ namespace LibGit2Sharp
         {
             get
             {
-                return Proxy.git_libgit2_features();
+                return Proxy.Std.git_libgit2_features();
             }
         }
 

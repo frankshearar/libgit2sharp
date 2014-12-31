@@ -18,7 +18,7 @@ namespace LibGit2Sharp.Core
             else
             {
                 Ensure.ArgumentNotNull(id, "id");
-                objectPtr = Proxy.git_object_lookup(handle, id, GitObjectType.Any);
+                objectPtr = Proxy.Std.git_object_lookup(handle, id, GitObjectType.Any);
             }
         }
 

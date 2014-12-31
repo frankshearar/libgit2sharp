@@ -4,7 +4,7 @@
     {
         protected override bool ReleaseHandleImpl()
         {
-            Proxy.git_branch_iterator_free(handle);
+            Proxy.Std.git_branch_iterator_free(handle);
             return true;
         }
     }

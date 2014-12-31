@@ -57,13 +57,13 @@ namespace LibGit2Sharp
             statusEntries = new List<StatusEntry>();
 
             using (GitStatusOptions coreOptions = CreateStatusOptions(options ?? new StatusOptions()))
-            using (StatusListSafeHandle list = Proxy.git_status_list_new(repo.Handle, coreOptions))
+            using (StatusListSafeHandle list = Proxy.Std.git_status_list_new(repo.Handle, coreOptions))
             {
-                int count = Proxy.git_status_list_entrycount(list);
+                int count = Proxy.Std.git_status_list_entrycount(list);
 
                 for (int i = 0; i < count; i++)
                 {
-                    StatusEntrySafeHandle e = Proxy.git_status_byindex(list, i);
+                    StatusEntrySafeHandle e = Proxy.Std.git_status_byindex(list, i);
                     GitStatusEntry entry = e.MarshalAsGitStatusEntry();
 
                     GitDiffDelta deltaHeadToIndex = null;

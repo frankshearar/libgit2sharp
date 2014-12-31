@@ -47,7 +47,7 @@ namespace LibGit2Sharp
 
             try
             {
-                Proxy.git_transport_register(
+                Proxy.Std.git_transport_register(
                     registration.Scheme,
                     registration.FunctionPointer,
                     registration.RegistrationPointer);
@@ -72,7 +72,7 @@ namespace LibGit2Sharp
         {
             Ensure.ArgumentNotNull(registration, "registration");
 
-            Proxy.git_transport_unregister(registration.Scheme);
+            Proxy.Std.git_transport_unregister(registration.Scheme);
             registration.Free();
         }
 
@@ -93,11 +93,11 @@ namespace LibGit2Sharp
 
                 if (logConfiguration.Level == LogLevel.None)
                 {
-                    Proxy.git_trace_set(0, null);
+                    Proxy.Std.git_trace_set(0, null);
                 }
                 else
                 {
-                    Proxy.git_trace_set(value.Level, value.GitTraceHandler);
+                    Proxy.Std.git_trace_set(value.Level, value.GitTraceHandler);
 
                     Log.Write(LogLevel.Info, "Logging enabled at level {0}", value.Level);
                 }

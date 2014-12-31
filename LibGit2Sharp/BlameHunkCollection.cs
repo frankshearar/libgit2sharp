@@ -40,12 +40,12 @@ namespace LibGit2Sharp
                 rawopts.OldestCommit = repo.Committish(options.StoppingAt).Oid;
             }
 
-            using (var blameHandle = Proxy.git_blame_file(repoHandle, path, rawopts))
+            using (var blameHandle = Proxy.Std.git_blame_file(repoHandle, path, rawopts))
             {
                 var numHunks = NativeMethods.git_blame_get_hunk_count(blameHandle);
                 for (uint i = 0; i < numHunks; ++i)
                 {
-                    var rawHunk = Proxy.git_blame_get_hunk_byindex(blameHandle, i);
+                    var rawHunk = Proxy.Std.git_blame_get_hunk_byindex(blameHandle, i);
                     hunks.Add(new BlameHunk(this.repo, rawHunk));
                 }
             }

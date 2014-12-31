@@ -36,7 +36,7 @@ namespace LibGit2Sharp
         {
             get
             {
-                return Proxy.git_index_conflict_get(repo.Index.Handle, repo, path);
+                return Proxy.Std.git_index_conflict_get(repo.Index.Handle, repo, path);
             }
         }
 

@@ -21,12 +21,12 @@ namespace LibGit2Sharp
             this.repo = repo;
             IsBare = isBare;
 
-            FilePath path = Proxy.git_repository_path(repo.Handle);
-            FilePath workingDirectoryPath = Proxy.git_repository_workdir(repo.Handle);
+            FilePath path = Proxy.Std.git_repository_path(repo.Handle);
+            FilePath workingDirectoryPath = Proxy.Std.git_repository_workdir(repo.Handle);
 
             Path = path.Native;
             WorkingDirectory = workingDirectoryPath == null ? null : workingDirectoryPath.Native;
-            IsShallow = Proxy.git_repository_is_shallow(repo.Handle);
+            IsShallow = Proxy.Std.git_repository_is_shallow(repo.Handle);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace LibGit2Sharp
         /// </summary>
         public virtual bool IsHeadDetached
         {
-            get { return Proxy.git_repository_head_detached(repo.Handle); }
+            get { return Proxy.Std.git_repository_head_detached(repo.Handle); }
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace LibGit2Sharp
         /// </summary>
         public virtual bool IsHeadUnborn
         {
-            get { return Proxy.git_repository_head_unborn(repo.Handle); }
+            get { return Proxy.Std.git_repository_head_unborn(repo.Handle); }
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace LibGit2Sharp
         /// </summary>
         public virtual CurrentOperation CurrentOperation
         {
-            get { return Proxy.git_repository_state(repo.Handle); }
+            get { return Proxy.Std.git_repository_state(repo.Handle); }
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace LibGit2Sharp
         /// </summary>
         public virtual string Message
         {
-            get { return Proxy.git_repository_message(repo.Handle); }
+            get { return Proxy.Std.git_repository_message(repo.Handle); }
         }
     }
 }

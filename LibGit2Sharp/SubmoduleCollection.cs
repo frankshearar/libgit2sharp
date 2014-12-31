@@ -43,8 +43,8 @@ namespace LibGit2Sharp
 
                 return Lookup(name, handle =>
                                     new Submodule(repo, name,
-                                                  Proxy.git_submodule_path(handle),
-                                                  Proxy.git_submodule_url(handle)));
+                                                  Proxy.Std.git_submodule_path(handle),
+                                                  Proxy.Std.git_submodule_url(handle)));
             }
         }
 
@@ -54,7 +54,7 @@ namespace LibGit2Sharp
         /// <returns>An <see cref="IEnumerator{T}"/> object that can be used to iterate through the collection.</returns>
         public virtual IEnumerator<Submodule> GetEnumerator()
         {
-            return Proxy.git_submodule_foreach(repo.Handle, (h, n) => LaxUtf8Marshaler.FromNative(n))
+            return Proxy.Std.git_submodule_foreach(repo.Handle, (h, n) => LaxUtf8Marshaler.FromNative(n))
                         .Select(n => this[n])
                         .GetEnumerator();
         }
@@ -75,18 +75,18 @@ namespace LibGit2Sharp
                                                 if (handle == null)
                                                     return false;
 
-                                                Proxy.git_submodule_add_to_index(handle, writeIndex);
+                                                Proxy.Std.git_submodule_add_to_index(handle, writeIndex);
                                                 return true;
                                             });
         }
 
         internal T Lookup<T>(string name, Func<SubmoduleSafeHandle, T> selector, bool throwIfNotFound = false)
         {
-            using (var handle = Proxy.git_submodule_lookup(repo.Handle, name))
+            using (var handle = Proxy.Std.git_submodule_lookup(repo.Handle, name))
             {
                 if (handle != null)
                 {
-                    Proxy.git_submodule_reload(handle);
+                    Proxy.Std.git_submodule_reload(handle);
                     return selector(handle);
                 }
 

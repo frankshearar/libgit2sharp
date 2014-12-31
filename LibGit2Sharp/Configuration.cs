@@ -33,16 +33,16 @@ namespace LibGit2Sharp
         {
             this.repository = repository;
 
-            globalConfigPath = globalConfigurationFileLocation ?? Proxy.git_config_find_global();
-            xdgConfigPath = xdgConfigurationFileLocation ?? Proxy.git_config_find_xdg();
-            systemConfigPath = systemConfigurationFileLocation ?? Proxy.git_config_find_system();
+            globalConfigPath = globalConfigurationFileLocation ?? Proxy.Std.git_config_find_global();
+            xdgConfigPath = xdgConfigurationFileLocation ?? Proxy.Std.git_config_find_xdg();
+            systemConfigPath = systemConfigurationFileLocation ?? Proxy.Std.git_config_find_system();
 
             Init();
         }
 
         private void Init()
         {
-            configHandle = Proxy.git_config_new();
+            configHandle = Proxy.Std.git_config_new();
 
             if (repository != null)
             {
@@ -51,24 +51,24 @@ namespace LibGit2Sharp
                 // to modify it before giving it to git_repository_open_ext() would be a good addition, I think."
                 //  -- Agreed :)
                 string repoConfigLocation = Path.Combine(repository.Info.Path, "config");
-                Proxy.git_config_add_file_ondisk(configHandle, repoConfigLocation, ConfigurationLevel.Local);
+                Proxy.Std.git_config_add_file_ondisk(configHandle, repoConfigLocation, ConfigurationLevel.Local);
 
-                Proxy.git_repository_set_config(repository.Handle, configHandle);
+                Proxy.Std.git_repository_set_config(repository.Handle, configHandle);
             }
 
             if (globalConfigPath != null)
             {
-                Proxy.git_config_add_file_ondisk(configHandle, globalConfigPath, ConfigurationLevel.Global);
+                Proxy.Std.git_config_add_file_ondisk(configHandle, globalConfigPath, ConfigurationLevel.Global);
             }
 
             if (xdgConfigPath != null)
             {
-                Proxy.git_config_add_file_ondisk(configHandle, xdgConfigPath, ConfigurationLevel.Xdg);
+                Proxy.Std.git_config_add_file_ondisk(configHandle, xdgConfigPath, ConfigurationLevel.Xdg);
             }
 
             if (systemConfigPath != null)
             {
-                Proxy.git_config_add_file_ondisk(configHandle, systemConfigPath, ConfigurationLevel.System);
+                Proxy.Std.git_config_add_file_ondisk(configHandle, systemConfigPath, ConfigurationLevel.System);
             }
         }
 
@@ -120,7 +120,7 @@ namespace LibGit2Sharp
 
             using (ConfigurationSafeHandle h = RetrieveConfigurationHandle(level, true, configHandle))
             {
-                Proxy.git_config_delete(h, key);
+                Proxy.Std.git_config_delete(h, key);
             }
         }
 
@@ -167,7 +167,7 @@ namespace LibGit2Sharp
 
             using (ConfigurationSafeHandle snapshot = Snapshot())
             {
-                return Proxy.git_config_get_entry<T>(snapshot, key);
+                return Proxy.Std.git_config_get_entry<T>(snapshot, key);
             }
         }
 
@@ -204,7 +204,7 @@ namespace LibGit2Sharp
                     return null;
                 }
 
-                return Proxy.git_config_get_entry<T>(handle, key);
+                return Proxy.Std.git_config_get_entry<T>(handle, key);
             }
         }
 
@@ -255,7 +255,7 @@ namespace LibGit2Sharp
             using (ConfigurationSafeHandle snapshot = Snapshot())
             using (ConfigurationSafeHandle h = RetrieveConfigurationHandle(level, true, snapshot))
             {
-                return Proxy.git_config_iterator_glob(h, regexp, BuildConfigEntry).ToList();
+                return Proxy.Std.git_config_iterator_glob(h, regexp, BuildConfigEntry).ToList();
             }
         }
 
@@ -264,7 +264,7 @@ namespace LibGit2Sharp
             ConfigurationSafeHandle handle = null;
             if (fromHandle != null)
             {
-                handle = Proxy.git_config_open_level(fromHandle, level);
+                handle = Proxy.Std.git_config_open_level(fromHandle, level);
             }
 
             if (handle == null && throwIfStoreHasNotBeenFound)
@@ -284,10 +284,10 @@ namespace LibGit2Sharp
 
         private readonly static IDictionary<Type, Action<string, object, ConfigurationSafeHandle>> configurationTypedUpdater = new Dictionary<Type, Action<string, object, ConfigurationSafeHandle>>
         {
-            { typeof(int), GetUpdater<int>(Proxy.git_config_set_int32) },
-            { typeof(long), GetUpdater<long>(Proxy.git_config_set_int64) },
-            { typeof(bool), GetUpdater<bool>(Proxy.git_config_set_bool) },
-            { typeof(string), GetUpdater<string>(Proxy.git_config_set_string) },
+            { typeof(int), GetUpdater<int>(Proxy.Std.git_config_set_int32) },
+            { typeof(long), GetUpdater<long>(Proxy.Std.git_config_set_int64) },
+            { typeof(bool), GetUpdater<bool>(Proxy.Std.git_config_set_bool) },
+            { typeof(string), GetUpdater<string>(Proxy.Std.git_config_set_string) },
         };
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace LibGit2Sharp
 
         private IEnumerable<ConfigurationEntry<string>> BuildConfigEntries()
         {
-            return Proxy.git_config_foreach(configHandle, BuildConfigEntry);
+            return Proxy.Std.git_config_foreach(configHandle, BuildConfigEntry);
         }
 
         private static ConfigurationEntry<string> BuildConfigEntry(IntPtr entryPtr)
@@ -377,7 +377,7 @@ namespace LibGit2Sharp
 
         private ConfigurationSafeHandle Snapshot()
         {
-            return Proxy.git_config_snapshot(configHandle);
+            return Proxy.Std.git_config_snapshot(configHandle);
         }
     }
 }

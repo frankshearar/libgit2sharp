@@ -47,7 +47,7 @@ namespace LibGit2Sharp
 
         internal SignatureSafeHandle BuildHandle()
         {
-            return Proxy.git_signature_new(name, email, when);
+            return Proxy.Std.git_signature_new(name, email, when);
         }
 
         /// <summary>

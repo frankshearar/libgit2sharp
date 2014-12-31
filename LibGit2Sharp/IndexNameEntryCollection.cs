@@ -31,7 +31,7 @@ namespace LibGit2Sharp
         {
             get
             {
-                IndexNameEntrySafeHandle entryHandle = Proxy.git_index_name_get_byindex(repo.Index.Handle, (UIntPtr)index);
+                IndexNameEntrySafeHandle entryHandle = Proxy.Std.git_index_name_get_byindex(repo.Index.Handle, (UIntPtr)index);
                 return IndexNameEntry.BuildFromPtr(entryHandle);
             }
         }
@@ -42,7 +42,7 @@ namespace LibGit2Sharp
         {
             var list = new List<IndexNameEntry>();
 
-            int count = Proxy.git_index_name_entrycount(repo.Index.Handle);
+            int count = Proxy.Std.git_index_name_entrycount(repo.Index.Handle);
 
             for (int i = 0; i < count; i++)
             {

@@ -30,9 +30,9 @@ namespace LibGit2Sharp
         private Remote(RemoteSafeHandle handle, Repository repository)
         {
             this.repository = repository;
-            Name = Proxy.git_remote_name(handle);
-            Url = Proxy.git_remote_url(handle);
-            TagFetchMode = Proxy.git_remote_autotag(handle);
+            Name = Proxy.Std.git_remote_name(handle);
+            Url = Proxy.Std.git_remote_url(handle);
+            TagFetchMode = Proxy.Std.git_remote_autotag(handle);
             refSpecs = new RefSpecCollection(handle);
         }
 
@@ -88,10 +88,10 @@ namespace LibGit2Sharp
         /// <returns>The transformed reference.</returns>
         internal string FetchSpecTransformToSource(string reference)
         {
-            using (RemoteSafeHandle remoteHandle = Proxy.git_remote_lookup(repository.Handle, Name, true))
+            using (RemoteSafeHandle remoteHandle = Proxy.Std.git_remote_lookup(repository.Handle, Name, true))
             {
-                GitRefSpecHandle fetchSpecPtr = Proxy.git_remote_get_refspec(remoteHandle, 0);
-                return Proxy.git_refspec_rtransform(fetchSpecPtr, reference);
+                GitRefSpecHandle fetchSpecPtr = Proxy.Std.git_remote_get_refspec(remoteHandle, 0);
+                return Proxy.Std.git_refspec_rtransform(fetchSpecPtr, reference);
             }
         }
 
@@ -102,7 +102,7 @@ namespace LibGit2Sharp
         /// <returns>true if the name is valid; false otherwise.</returns>
         public static bool IsValidName(string name)
         {
-            return Proxy.git_remote_is_valid_name(name);
+            return Proxy.Std.git_remote_is_valid_name(name);
         }
 
         /// <summary>

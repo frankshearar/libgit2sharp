@@ -35,8 +35,8 @@ namespace LibGit2Sharp
         {
             Ensure.ArgumentNotNull(handle, "handle");
 
-            return new RefSpec(Proxy.git_refspec_string(handle), Proxy.git_refspec_direction(handle),
-                Proxy.git_refspec_src(handle), Proxy.git_refspec_dst(handle), Proxy.git_refspec_force(handle));
+            return new RefSpec(Proxy.Std.git_refspec_string(handle), Proxy.Std.git_refspec_direction(handle),
+                Proxy.Std.git_refspec_src(handle), Proxy.Std.git_refspec_dst(handle), Proxy.Std.git_refspec_force(handle));
         }
 
         /// <summary>

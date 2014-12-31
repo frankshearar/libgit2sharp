@@ -108,7 +108,7 @@ namespace LibGit2Sharp
 
                 string canonicalNamespace = NormalizeToCanonicalName(@namespace);
 
-                return Proxy.git_note_foreach(repo.Handle, canonicalNamespace,
+                return Proxy.Std.git_note_foreach(repo.Handle, canonicalNamespace,
                     (blobId,annotatedObjId) => this[canonicalNamespace, annotatedObjId]);
             }
         }
@@ -125,7 +125,7 @@ namespace LibGit2Sharp
 
                 string canonicalNamespace = NormalizeToCanonicalName(@namespace);
 
-                using (NoteSafeHandle noteHandle = Proxy.git_note_read(repo.Handle, canonicalNamespace, id))
+                using (NoteSafeHandle noteHandle = Proxy.Std.git_note_read(repo.Handle, canonicalNamespace, id))
                 {
                     return noteHandle == null
                         ? null
@@ -136,7 +136,7 @@ namespace LibGit2Sharp
 
         private string RetrieveDefaultNamespace()
         {
-            string notesRef = Proxy.git_note_default_ref(repo.Handle);
+            string notesRef = Proxy.Std.git_note_default_ref(repo.Handle);
 
             return UnCanonicalizeName(notesRef);
         }
@@ -186,7 +186,7 @@ namespace LibGit2Sharp
 
             Remove(targetId, author, committer, @namespace);
 
-            Proxy.git_note_create(repo.Handle, canonicalNamespace, author, committer, targetId, message, true);
+            Proxy.Std.git_note_create(repo.Handle, canonicalNamespace, author, committer, targetId, message, true);
 
             return this[canonicalNamespace, targetId];
         }
@@ -207,7 +207,7 @@ namespace LibGit2Sharp
 
             string canonicalNamespace = NormalizeToCanonicalName(@namespace);
 
-            Proxy.git_note_remove(repo.Handle, canonicalNamespace, author, committer, targetId);
+            Proxy.Std.git_note_remove(repo.Handle, canonicalNamespace, author, committer, targetId);
         }
 
         private string DebuggerDisplay

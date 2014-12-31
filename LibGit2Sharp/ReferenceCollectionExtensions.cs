@@ -59,7 +59,7 @@ namespace LibGit2Sharp
 
             if (refState == RefState.DoesNotExistButLooksValid && gitObject == null)
             {
-                using (ReferenceSafeHandle handle = Proxy.git_reference_symbolic_create(refsColl.repo.Handle, name, canonicalRefNameOrObjectish, allowOverwrite,
+                using (ReferenceSafeHandle handle = Proxy.Std.git_reference_symbolic_create(refsColl.repo.Handle, name, canonicalRefNameOrObjectish, allowOverwrite,
                     signature.OrDefault(refsColl.repo.Config), logMessage))
                 {
                     return Reference.BuildFromPtr<Reference>(handle, refsColl.repo);
@@ -280,7 +280,7 @@ namespace LibGit2Sharp
                         break;
                     }
 
-                    if (Proxy.git_graph_descendant_of(refsColl.repo.Handle, commitId, potentialAncestorId))
+                    if (Proxy.Std.git_graph_descendant_of(refsColl.repo.Handle, commitId, potentialAncestorId))
                     {
                         result.Add(reference);
                         break;

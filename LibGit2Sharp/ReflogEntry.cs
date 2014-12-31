@@ -26,10 +26,10 @@ namespace LibGit2Sharp
         /// <param name="entryHandle">a <see cref="SafeHandle"/> to the reflog entry</param>
         public ReflogEntry(SafeHandle entryHandle)
         {
-            _from = Proxy.git_reflog_entry_id_old(entryHandle);
-            _to = Proxy.git_reflog_entry_id_new(entryHandle);
-            _commiter = Proxy.git_reflog_entry_committer(entryHandle);
-            message = Proxy.git_reflog_entry_message(entryHandle);
+            _from = Proxy.Std.git_reflog_entry_id_old(entryHandle);
+            _to = Proxy.Std.git_reflog_entry_id_new(entryHandle);
+            _commiter = Proxy.Std.git_reflog_entry_committer(entryHandle);
+            message = Proxy.Std.git_reflog_entry_message(entryHandle);
         }
 
         /// <summary>

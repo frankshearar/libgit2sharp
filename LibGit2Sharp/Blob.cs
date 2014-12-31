@@ -21,8 +21,8 @@ namespace LibGit2Sharp
         internal Blob(Repository repo, ObjectId id)
             : base(repo, id)
         {
-            lazySize = GitObjectLazyGroup.Singleton(repo, id, Proxy.git_blob_rawsize);
-            lazyIsBinary = GitObjectLazyGroup.Singleton(repo, id, Proxy.git_blob_is_binary);
+            lazySize = GitObjectLazyGroup.Singleton(repo, id, Proxy.Std.git_blob_rawsize);
+            lazyIsBinary = GitObjectLazyGroup.Singleton(repo, id, Proxy.Std.git_blob_is_binary);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace LibGit2Sharp
         /// </summary>
         public virtual Stream GetContentStream()
         {
-            return Proxy.git_blob_rawcontent_stream(repo.Handle, Id, Size);
+            return Proxy.Std.git_blob_rawcontent_stream(repo.Handle, Id, Size);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace LibGit2Sharp
         public virtual Stream GetContentStream(FilteringOptions filteringOptions)
         {
             Ensure.ArgumentNotNull(filteringOptions, "filteringOptions");
-            return Proxy.git_blob_filtered_content_stream(repo.Handle, Id, filteringOptions.HintPath, false);
+            return Proxy.Std.git_blob_filtered_content_stream(repo.Handle, Id, filteringOptions.HintPath, false);
         }
     }
 }

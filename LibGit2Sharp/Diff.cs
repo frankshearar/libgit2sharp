@@ -274,28 +274,28 @@ namespace LibGit2Sharp
 
         private static TreeComparisonHandleRetriever TreeToTree(Repository repo)
         {
-            return (oh, nh, o) => Proxy.git_diff_tree_to_tree(repo.Handle, oh, nh, o);
+            return (oh, nh, o) => Proxy.Std.git_diff_tree_to_tree(repo.Handle, oh, nh, o);
         }
 
         private static TreeComparisonHandleRetriever WorkdirToIndex(Repository repo)
         {
-            return (oh, nh, o) => Proxy.git_diff_index_to_workdir(repo.Handle, repo.Index.Handle, o);
+            return (oh, nh, o) => Proxy.Std.git_diff_index_to_workdir(repo.Handle, repo.Index.Handle, o);
         }
 
         private static TreeComparisonHandleRetriever WorkdirToTree(Repository repo)
         {
-            return (oh, nh, o) => Proxy.git_diff_tree_to_workdir(repo.Handle, oh, o);
+            return (oh, nh, o) => Proxy.Std.git_diff_tree_to_workdir(repo.Handle, oh, o);
         }
 
         private static TreeComparisonHandleRetriever WorkdirAndIndexToTree(Repository repo)
         {
             TreeComparisonHandleRetriever comparisonHandleRetriever = (oh, nh, o) =>
             {
-                DiffSafeHandle diff = Proxy.git_diff_tree_to_index(repo.Handle, repo.Index.Handle, oh, o);
+                DiffSafeHandle diff = Proxy.Std.git_diff_tree_to_index(repo.Handle, repo.Index.Handle, oh, o);
 
-                using (DiffSafeHandle diff2 = Proxy.git_diff_index_to_workdir(repo.Handle, repo.Index.Handle, o))
+                using (DiffSafeHandle diff2 = Proxy.Std.git_diff_index_to_workdir(repo.Handle, repo.Index.Handle, o))
                 {
-                    Proxy.git_diff_merge(diff, diff2);
+                    Proxy.Std.git_diff_merge(diff, diff2);
                 }
 
                 return diff;
@@ -306,7 +306,7 @@ namespace LibGit2Sharp
 
         private static TreeComparisonHandleRetriever IndexToTree(Repository repo)
         {
-            return (oh, nh, o) => Proxy.git_diff_tree_to_index(repo.Handle, repo.Index.Handle, oh, o);
+            return (oh, nh, o) => Proxy.Std.git_diff_tree_to_index(repo.Handle, repo.Index.Handle, oh, o);
         }
 
         private DiffSafeHandle BuildDiffList(ObjectId oldTreeId, ObjectId newTreeId, TreeComparisonHandleRetriever comparisonHandleRetriever,
@@ -345,7 +345,7 @@ namespace LibGit2Sharp
             if (similarityOptions == null ||
                 similarityOptions.RenameDetectionMode == RenameDetectionMode.Default)
             {
-                Proxy.git_diff_find_similar(diffList, null);
+                Proxy.Std.git_diff_find_similar(diffList, null);
                 return;
             }
 
@@ -403,7 +403,7 @@ namespace LibGit2Sharp
                     break;
             }
 
-            Proxy.git_diff_find_similar(diffList, opts);
+            Proxy.Std.git_diff_find_similar(diffList, opts);
         }
 
         private static void DispatchUnmatchedPaths(ExplicitPathsOptions explicitPathsOptions,

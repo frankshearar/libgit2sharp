@@ -4,7 +4,7 @@
     {
         protected override bool ReleaseHandleImpl()
         {
-            Proxy.git_revwalk_free(handle);
+            Proxy.Std.git_revwalk_free(handle);
             return true;
         }
     }

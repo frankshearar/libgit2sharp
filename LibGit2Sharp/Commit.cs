@@ -36,14 +36,14 @@ namespace LibGit2Sharp
         internal Commit(Repository repo, ObjectId id)
             : base(repo, id)
         {
-            lazyTree = GitObjectLazyGroup.Singleton(this.repo, id, obj => new Tree(this.repo, Proxy.git_commit_tree_id(obj), null));
+            lazyTree = GitObjectLazyGroup.Singleton(this.repo, id, obj => new Tree(this.repo, Proxy.Std.git_commit_tree_id(obj), null));
 
             group1 = new GitObjectLazyGroup(this.repo, id);
-            lazyAuthor = group1.AddLazy(Proxy.git_commit_author);
-            lazyCommitter = group1.AddLazy(Proxy.git_commit_committer);
+            lazyAuthor = group1.AddLazy(Proxy.Std.git_commit_author);
+            lazyCommitter = group1.AddLazy(Proxy.Std.git_commit_committer);
             group2 = new GitObjectLazyGroup(this.repo, id);
-            lazyMessage = group2.AddLazy(Proxy.git_commit_message);
-            lazyMessageShort = group2.AddLazy(Proxy.git_commit_summary);
+            lazyMessage = group2.AddLazy(Proxy.Std.git_commit_message);
+            lazyMessageShort = group2.AddLazy(Proxy.Std.git_commit_summary);
             lazyEncoding = group2.AddLazy(RetrieveEncodingOf);
 
             lazyNotes = new Lazy<IEnumerable<Note>>(() => RetrieveNotesOfCommit(id).ToList());
@@ -108,7 +108,7 @@ namespace LibGit2Sharp
 
         private static string RetrieveEncodingOf(GitObjectSafeHandle obj)
         {
-            string encoding = Proxy.git_commit_message_encoding(obj);
+            string encoding = Proxy.Std.git_commit_message_encoding(obj);
 
             return encoding ?? "UTF-8";
         }
@@ -129,7 +129,7 @@ namespace LibGit2Sharp
 
             public ParentsCollection(Repository repo, ObjectId commitId)
             {
-                _count = new Lazy<int>(() => Proxy.git_commit_parentcount(repo.Handle, commitId));
+                _count = new Lazy<int>(() => Proxy.Std.git_commit_parentcount(repo.Handle, commitId));
                 _parents = new Lazy<ICollection<Commit>>(() => RetrieveParentsOfCommit(repo, commitId));
             }
 
@@ -142,7 +142,7 @@ namespace LibGit2Sharp
 
                     for (uint i = 0; i < parentsCount; i++)
                     {
-                        ObjectId parentCommitId = Proxy.git_commit_parent_id(obj.ObjectPtr, i);
+                        ObjectId parentCommitId = Proxy.Std.git_commit_parent_id(obj.ObjectPtr, i);
                         parents.Add(new Commit(repo, parentCommitId));
                     }
 

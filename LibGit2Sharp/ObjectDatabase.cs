@@ -28,7 +28,7 @@ namespace LibGit2Sharp
         internal ObjectDatabase(Repository repo)
         {
             this.repo = repo;
-            handle = Proxy.git_repository_odb(repo.Handle);
+            handle = Proxy.Std.git_repository_odb(repo.Handle);
 
             repo.RegisterForCleanup(handle);
         }
@@ -41,7 +41,7 @@ namespace LibGit2Sharp
         /// <returns>An <see cref="IEnumerator{T}"/> object that can be used to iterate through the collection.</returns>
         public virtual IEnumerator<GitObject> GetEnumerator()
         {
-            ICollection<GitOid> oids = Proxy.git_odb_foreach(handle,
+            ICollection<GitOid> oids = Proxy.Std.git_odb_foreach(handle,
                 ptr => ptr.MarshalAs<GitOid>());
 
             return oids
@@ -69,7 +69,7 @@ namespace LibGit2Sharp
         {
             Ensure.ArgumentNotNull(objectId, "objectId");
 
-            return Proxy.git_odb_exists(handle, objectId);
+            return Proxy.Std.git_odb_exists(handle, objectId);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace LibGit2Sharp
         {
             Ensure.ArgumentNotNull(objectId, "objectId");
 
-            return Proxy.git_odb_read_header(handle, objectId);
+            return Proxy.Std.git_odb_read_header(handle, objectId);
         }
 
         /// <summary>
@@ -105,8 +105,8 @@ namespace LibGit2Sharp
             }
 
             ObjectId id = Path.IsPathRooted(path)
-                               ? Proxy.git_blob_create_fromdisk(repo.Handle, path)
-                               : Proxy.git_blob_create_fromfile(repo.Handle, path);
+                               ? Proxy.Std.git_blob_create_fromdisk(repo.Handle, path)
+                               : Proxy.Std.git_blob_create_fromfile(repo.Handle, path);
 
             return repo.Lookup<Blob>(id);
         }
@@ -125,7 +125,7 @@ namespace LibGit2Sharp
             Ensure.ArgumentNotNull(backend, "backend");
             Ensure.ArgumentConformsTo(priority, s => s > 0, "priority");
 
-            Proxy.git_odb_add_backend(handle, backend.GitOdbBackendPointer, priority);
+            Proxy.Std.git_odb_add_backend(handle, backend.GitOdbBackendPointer, priority);
         }
 
         private class Processor
@@ -201,7 +201,7 @@ namespace LibGit2Sharp
             }
 
             var proc = new Processor(stream, numberOfBytesToConsume);
-            ObjectId id = Proxy.git_blob_create_fromchunks(repo.Handle, hintpath, proc.Provider);
+            ObjectId id = Proxy.Std.git_blob_create_fromchunks(repo.Handle, hintpath, proc.Provider);
 
             return repo.Lookup<Blob>(id);
         }
@@ -221,7 +221,7 @@ namespace LibGit2Sharp
                 throw new ArgumentException("The stream cannot be read from.", "stream");
             }
 
-            using (var odbStream = Proxy.git_odb_open_wstream(handle, (UIntPtr)numberOfBytesToConsume, GitObjectType.Blob))
+            using (var odbStream = Proxy.Std.git_odb_open_wstream(handle, (UIntPtr)numberOfBytesToConsume, GitObjectType.Blob))
             {
                 var buffer = new byte[4*1024];
                 int totalRead = 0;
@@ -237,11 +237,11 @@ namespace LibGit2Sharp
                         throw new EndOfStreamException("The stream ended unexpectedly");
                     }
 
-                    Proxy.git_odb_stream_write(odbStream, buffer, read);
+                    Proxy.Std.git_odb_stream_write(odbStream, buffer, read);
                     totalRead += read;
                 }
 
-                var id = Proxy.git_odb_stream_finalize_write(odbStream);
+                var id = Proxy.Std.git_odb_stream_finalize_write(odbStream);
 
                 return repo.Lookup<Blob>(id);
             }
@@ -274,7 +274,7 @@ namespace LibGit2Sharp
         {
             Ensure.ArgumentNotNull(index, "index");
 
-            var treeId = Proxy.git_tree_create_fromindex(index);
+            var treeId = Proxy.Std.git_tree_create_fromindex(index);
             return this.repo.Lookup<Tree>(treeId);
         }
 
@@ -308,11 +308,11 @@ namespace LibGit2Sharp
 
             if (prettifyMessage)
             {
-                message = Proxy.git_message_prettify(message, commentChar);
+                message = Proxy.Std.git_message_prettify(message, commentChar);
             }
             GitOid[] parentIds = parents.Select(p => p.Id.Oid).ToArray();
 
-            ObjectId commitId = Proxy.git_commit_create(repo.Handle, null, author, committer, message, tree, parentIds);
+            ObjectId commitId = Proxy.Std.git_commit_create(repo.Handle, null, author, committer, message, tree, parentIds);
 
             return repo.Lookup<Commit>(commitId);
         }
@@ -334,9 +334,9 @@ namespace LibGit2Sharp
             Ensure.ArgumentDoesNotContainZeroByte(name, "name");
             Ensure.ArgumentDoesNotContainZeroByte(message, "message");
 
-            string prettifiedMessage = Proxy.git_message_prettify(message, null);
+            string prettifiedMessage = Proxy.Std.git_message_prettify(message, null);
 
-            ObjectId tagId = Proxy.git_tag_annotation_create(repo.Handle, name, target, tagger, prettifiedMessage);
+            ObjectId tagId = Proxy.Std.git_tag_annotation_create(repo.Handle, name, target, tagger, prettifiedMessage);
 
             return repo.Lookup<TagAnnotation>(tagId);
         }
@@ -397,7 +397,7 @@ namespace LibGit2Sharp
                     string.Format("Expected value should be greater than zero and less than or equal to {0}.", ObjectId.HexSize));
             }
 
-            string shortSha = Proxy.git_object_short_id(repo.Handle, gitObject.Id);
+            string shortSha = Proxy.Std.git_object_short_id(repo.Handle, gitObject.Id);
 
             if (minLength == null || (minLength <= shortSha.Length))
             {

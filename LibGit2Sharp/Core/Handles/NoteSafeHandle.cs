@@ -4,7 +4,7 @@
     {
         protected override bool ReleaseHandleImpl()
         {
-            Proxy.git_note_free(handle);
+            Proxy.Std.git_note_free(handle);
             return true;
         }
     }

@@ -93,7 +93,7 @@ namespace LibGit2Sharp
                 }
                 catch (Exception ex)
                 {
-                    Proxy.giterr_set_str(GitErrorCategory.Net, ex);
+                    Proxy.Std.giterr_set_str(GitErrorCategory.Net, ex);
                 }
 
                 return (int)GitErrorCode.Error;
@@ -112,7 +112,7 @@ namespace LibGit2Sharp
                 }
                 catch (Exception ex)
                 {
-                    Proxy.giterr_set_str(GitErrorCategory.Net, ex);
+                    Proxy.Std.giterr_set_str(GitErrorCategory.Net, ex);
                 }
 
                 return (int)GitErrorCode.Error;

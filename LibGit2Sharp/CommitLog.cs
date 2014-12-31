@@ -127,10 +127,10 @@ namespace LibGit2Sharp
             switch (strategy)
             {
                 case MergeBaseFindingStrategy.Standard:
-                    id = Proxy.git_merge_base_many(repo.Handle, ids.ToArray());
+                    id = Proxy.Std.git_merge_base_many(repo.Handle, ids.ToArray());
                     break;
                 case MergeBaseFindingStrategy.Octopus:
-                    id = Proxy.git_merge_base_octopus(repo.Handle, ids.ToArray());
+                    id = Proxy.Std.git_merge_base_octopus(repo.Handle, ids.ToArray());
                     break;
                 default:
                     throw new ArgumentException("", "strategy");
@@ -148,7 +148,7 @@ namespace LibGit2Sharp
             public CommitEnumerator(Repository repo, CommitFilter filter)
             {
                 this.repo = repo;
-                handle = Proxy.git_revwalk_new(repo.Handle);
+                handle = Proxy.Std.git_revwalk_new(repo.Handle);
                 repo.RegisterForCleanup(handle);
 
                 Sort(filter.SortBy);
@@ -171,7 +171,7 @@ namespace LibGit2Sharp
 
             public bool MoveNext()
             {
-                ObjectId id = Proxy.git_revwalk_next(handle);
+                ObjectId id = Proxy.Std.git_revwalk_next(handle);
 
                 if (id == null)
                 {
@@ -185,7 +185,7 @@ namespace LibGit2Sharp
 
             public void Reset()
             {
-                Proxy.git_revwalk_reset(handle);
+                Proxy.Std.git_revwalk_reset(handle);
             }
 
             #endregion
@@ -215,7 +215,7 @@ namespace LibGit2Sharp
 
             private void Push(IList<object> identifier)
             {
-                InternalHidePush(identifier, Proxy.git_revwalk_push);
+                InternalHidePush(identifier, Proxy.Std.git_revwalk_push);
             }
 
             private void Hide(IList<object> identifier)
@@ -225,19 +225,19 @@ namespace LibGit2Sharp
                     return;
                 }
 
-                InternalHidePush(identifier, Proxy.git_revwalk_hide);
+                InternalHidePush(identifier, Proxy.Std.git_revwalk_hide);
             }
 
             private void Sort(CommitSortStrategies options)
             {
-                Proxy.git_revwalk_sorting(handle, options);
+                Proxy.Std.git_revwalk_sorting(handle, options);
             }
 
             private void FirstParentOnly(bool firstParent)
             {
                 if (firstParent)
                 {
-                    Proxy.git_revwalk_simplify_first_parent(handle);
+                    Proxy.Std.git_revwalk_simplify_first_parent(handle);
                 }
             }
         }

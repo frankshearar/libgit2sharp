@@ -39,14 +39,14 @@ namespace LibGit2Sharp
             this.url = url;
 
             var commitIds = new SubmoduleLazyGroup(repo, name);
-            headCommitId = commitIds.AddLazy(Proxy.git_submodule_head_id);
-            indexCommitId = commitIds.AddLazy(Proxy.git_submodule_index_id);
-            workdirCommitId = commitIds.AddLazy(Proxy.git_submodule_wd_id);
+            headCommitId = commitIds.AddLazy(Proxy.Std.git_submodule_head_id);
+            indexCommitId = commitIds.AddLazy(Proxy.Std.git_submodule_index_id);
+            workdirCommitId = commitIds.AddLazy(Proxy.Std.git_submodule_wd_id);
 
             var rules = new SubmoduleLazyGroup(repo, name);
-            fetchRecurseSubmodulesRule = rules.AddLazy(Proxy.git_submodule_fetch_recurse_submodules);
-            ignoreRule = rules.AddLazy(Proxy.git_submodule_ignore);
-            updateRule = rules.AddLazy(Proxy.git_submodule_update);
+            fetchRecurseSubmodulesRule = rules.AddLazy(Proxy.Std.git_submodule_fetch_recurse_submodules);
+            ignoreRule = rules.AddLazy(Proxy.Std.git_submodule_ignore);
+            updateRule = rules.AddLazy(Proxy.Std.git_submodule_update);
         }
 
         /// <summary>
@@ -103,9 +103,9 @@ namespace LibGit2Sharp
         /// <returns>The <see cref="SubmoduleStatus"/> of this submodule.</returns>
         public virtual SubmoduleStatus RetrieveStatus()
         {
-            using (var handle = Proxy.git_submodule_lookup(repo.Handle, Name))
+            using (var handle = Proxy.Std.git_submodule_lookup(repo.Handle, Name))
             {
-                return Proxy.git_submodule_status(handle);
+                return Proxy.Std.git_submodule_status(handle);
             }
         }
 

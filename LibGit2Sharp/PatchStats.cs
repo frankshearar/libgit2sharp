@@ -27,16 +27,16 @@ namespace LibGit2Sharp
 
         internal PatchStats(DiffSafeHandle diff)
         {
-            int count = Proxy.git_diff_num_deltas(diff);
+            int count = Proxy.Std.git_diff_num_deltas(diff);
             for (int i = 0; i < count; i++)
             {
-                using (var patch = Proxy.git_patch_from_diff(diff, i))
+                using (var patch = Proxy.Std.git_patch_from_diff(diff, i))
                 {
-                    var delta = Proxy.git_diff_get_delta(diff, i);
+                    var delta = Proxy.Std.git_diff_get_delta(diff, i);
                     var pathPtr = delta.NewFile.Path != IntPtr.Zero ? delta.NewFile.Path : delta.OldFile.Path;
                     var newFilePath = LaxFilePathMarshaler.FromNative(pathPtr);
 
-                    var stats = Proxy.git_patch_line_stats(patch);
+                    var stats = Proxy.Std.git_patch_line_stats(patch);
                     int added = stats.Item1;
                     int deleted = stats.Item2;
                     changes.Add(newFilePath, new ContentChangeStats(added, deleted));

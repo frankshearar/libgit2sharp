@@ -32,14 +32,14 @@ namespace LibGit2Sharp
 
         internal Patch(DiffSafeHandle diff)
         {
-            int count = Proxy.git_diff_num_deltas(diff);
+            int count = Proxy.Std.git_diff_num_deltas(diff);
             for (int i = 0; i < count; i++)
             {
-                using (var patch = Proxy.git_patch_from_diff(diff, i))
+                using (var patch = Proxy.Std.git_patch_from_diff(diff, i))
                 {
-                    var delta = Proxy.git_diff_get_delta(diff, i);
+                    var delta = Proxy.Std.git_diff_get_delta(diff, i);
                     AddFileChange(delta);
-                    Proxy.git_patch_print(patch, PrintCallBack);
+                    Proxy.Std.git_patch_print(patch, PrintCallBack);
                 }
 
             }

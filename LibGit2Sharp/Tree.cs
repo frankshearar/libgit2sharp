@@ -29,7 +29,7 @@ namespace LibGit2Sharp
         {
             this.path = path ?? "";
 
-            lazyCount = GitObjectLazyGroup.Singleton(repo, id, Proxy.git_tree_entrycount);
+            lazyCount = GitObjectLazyGroup.Singleton(repo, id, Proxy.Std.git_tree_entrycount);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace LibGit2Sharp
                 return null;
             }
 
-            using (TreeEntrySafeHandle_Owned treeEntryPtr = Proxy.git_tree_entry_bypath(repo.Handle, Id, relativePath))
+            using (TreeEntrySafeHandle_Owned treeEntryPtr = Proxy.Std.git_tree_entry_bypath(repo.Handle, Id, relativePath))
             {
                 if (treeEntryPtr == null)
                 {
@@ -85,7 +85,7 @@ namespace LibGit2Sharp
             {
                 for (uint i = 0; i < Count; i++)
                 {
-                    TreeEntrySafeHandle handle = Proxy.git_tree_entry_byindex(obj.ObjectPtr, i);
+                    TreeEntrySafeHandle handle = Proxy.Std.git_tree_entry_byindex(obj.ObjectPtr, i);
                     yield return new TreeEntry(handle, Id, repo, path);
                 }
             }

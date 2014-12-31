@@ -6,7 +6,7 @@ namespace LibGit2Sharp.Core.Handles
     {
         protected override bool ReleaseHandleImpl()
         {
-            Proxy.git_annotated_commit_free(handle);
+            Proxy.Std.git_annotated_commit_free(handle);
             return true;
         }
     }

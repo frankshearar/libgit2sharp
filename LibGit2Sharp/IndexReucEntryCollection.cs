@@ -36,7 +36,7 @@ namespace LibGit2Sharp
             {
                 Ensure.ArgumentNotNullOrEmptyString(path, "path");
 
-                IndexReucEntrySafeHandle entryHandle = Proxy.git_index_reuc_get_bypath(repo.Index.Handle, path);
+                IndexReucEntrySafeHandle entryHandle = Proxy.Std.git_index_reuc_get_bypath(repo.Index.Handle, path);
                 return IndexReucEntry.BuildFromPtr(entryHandle);
             }
         }
@@ -45,7 +45,7 @@ namespace LibGit2Sharp
         {
             get
             {
-                IndexReucEntrySafeHandle entryHandle = Proxy.git_index_reuc_get_byindex(repo.Index.Handle, (UIntPtr)index);
+                IndexReucEntrySafeHandle entryHandle = Proxy.Std.git_index_reuc_get_byindex(repo.Index.Handle, (UIntPtr)index);
                 return IndexReucEntry.BuildFromPtr(entryHandle);
             }
         }
@@ -56,7 +56,7 @@ namespace LibGit2Sharp
         {
             var list = new List<IndexReucEntry>();
 
-            int count = Proxy.git_index_reuc_entrycount(repo.Index.Handle);
+            int count = Proxy.Std.git_index_reuc_entrycount(repo.Index.Handle);
 
             for (int i = 0; i < count; i++)
             {

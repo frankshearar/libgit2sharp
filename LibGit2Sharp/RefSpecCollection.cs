@@ -31,12 +31,12 @@ namespace LibGit2Sharp
 
         static IList<RefSpec> RetrieveRefSpecs(RemoteSafeHandle remoteHandle)
         {
-            int count = Proxy.git_remote_refspec_count(remoteHandle);
+            int count = Proxy.Std.git_remote_refspec_count(remoteHandle);
             List<RefSpec> refSpecs = new List<RefSpec>();
 
             for (int i = 0; i < count; i++)
             {
-                using (GitRefSpecHandle handle = Proxy.git_remote_get_refspec(remoteHandle, i))
+                using (GitRefSpecHandle handle = Proxy.Std.git_remote_get_refspec(remoteHandle, i))
                 {
                     refSpecs.Add(RefSpec.BuildFromPtr(handle));
                 }

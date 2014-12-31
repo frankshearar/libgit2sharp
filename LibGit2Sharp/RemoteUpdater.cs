@@ -28,29 +28,29 @@ namespace LibGit2Sharp
             fetchRefSpecs = new UpdatingCollection<string>(GetFetchRefSpecs, SetFetchRefSpecs);
             pushRefSpecs = new UpdatingCollection<string>(GetPushRefSpecs, SetPushRefSpecs);
 
-            remoteHandle = Proxy.git_remote_lookup(repo.Handle, remote.Name, true);
+            remoteHandle = Proxy.Std.git_remote_lookup(repo.Handle, remote.Name, true);
         }
 
         private IEnumerable<string> GetFetchRefSpecs()
         {
-            return Proxy.git_remote_get_fetch_refspecs(remoteHandle);
+            return Proxy.Std.git_remote_get_fetch_refspecs(remoteHandle);
         }
 
         private void SetFetchRefSpecs(IEnumerable<string> value)
         {
-            Proxy.git_remote_set_fetch_refspecs(remoteHandle, value);
-            Proxy.git_remote_save(remoteHandle);
+            Proxy.Std.git_remote_set_fetch_refspecs(remoteHandle, value);
+            Proxy.Std.git_remote_save(remoteHandle);
         }
 
         private IEnumerable<string> GetPushRefSpecs()
         {
-            return Proxy.git_remote_get_push_refspecs(remoteHandle);
+            return Proxy.Std.git_remote_get_push_refspecs(remoteHandle);
         }
 
         private void SetPushRefSpecs(IEnumerable<string> value)
         {
-            Proxy.git_remote_set_push_refspecs(remoteHandle, value);
-            Proxy.git_remote_save(remoteHandle);
+            Proxy.Std.git_remote_set_push_refspecs(remoteHandle, value);
+            Proxy.Std.git_remote_save(remoteHandle);
         }
 
         /// <summary>
@@ -60,8 +60,8 @@ namespace LibGit2Sharp
         {
             set
             {
-                Proxy.git_remote_set_autotag(remoteHandle, value);
-                Proxy.git_remote_save(remoteHandle);
+                Proxy.Std.git_remote_set_autotag(remoteHandle, value);
+                Proxy.Std.git_remote_save(remoteHandle);
             }
         }
 
@@ -72,8 +72,8 @@ namespace LibGit2Sharp
         {
             set
             {
-                Proxy.git_remote_set_url(remoteHandle, value);
-                Proxy.git_remote_save(remoteHandle);
+                Proxy.Std.git_remote_set_url(remoteHandle, value);
+                Proxy.Std.git_remote_save(remoteHandle);
             }
         }
 
